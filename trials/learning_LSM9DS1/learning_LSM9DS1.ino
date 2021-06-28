@@ -52,6 +52,9 @@
    https://roboticsclubiitk.github.io/2017/12/21/Beginners-Guide-to-IMU.html
    http://www.starlino.com/dcm_tutorial.html
 
+   TODO
+   https://theccontinuum.com/2012/09/24/arduino-imu-pitch-roll-from-accelerometer/
+
 
 */
 
