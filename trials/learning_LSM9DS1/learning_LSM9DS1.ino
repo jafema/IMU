@@ -19,11 +19,29 @@
  * [5] How to calculate the angle from sparkfun lsm9ds1 IMU sensor ?
  * https://forum.arduino.cc/t/how-to-calculate-the-angle-from-sparkfun-lsm9ds1-imu-sensor/702695/5
  * 
- * [6]kriswiner/LSM9DS1 ---ª angle calculation at line 539
+ * [6]kriswiner/LSM9DS1 ---> angle calculation at line 539
  * https://github.com/kriswiner/LSM9DS1/blob/master/LSM9DS1_MS5611_BasicAHRS_t3.ino
  * 
  * [7] How to Fuse Motion Sensor Data into AHRS Orientation (Euler/Quaternions) 
  * https://learn.adafruit.com/how-to-fuse-motion-sensor-data-into-ahrs-orientation-euler-quaternions/
+ * 
+ *  
+ * Sparkfun
+ * [8] LSM9DS1 Breakout Hookup Guide
+ * https://learn.sparkfun.com/tutorials/lsm9ds1-breakout-hookup-guide/all
+ * 
+ * [9] SparkFun_LSM9DS1_Arduino_Library
+ * https://github.com/sparkfun/SparkFun_LSM9DS1_Arduino_Library
+ * 
+ * ST
+ * ST Drivers ---> C-Driver-MEMS. Standard C platform-independent drivers for MEMS motion and environmental sensors
+ * https://www.st.com/content/st_com/en/products/embedded-software/mems-and-sensors-software/drivers-for-mems/c-driver-mems.html
+ * https://github.com/STMicroelectronics/
+ * https://github.com/STMicroelectronics/STMems_Standard_C_drivers
+ * 
+ * lsm9ds1_STdC
+ * [10] https://github.com/STMicroelectronics/STMems_Standard_C_drivers/tree/master/lsm9ds1_STdC
+ * 
 */
 #include <Arduino_LSM9DS1.h>
 #include <Wire.h> // to include constant macro PI, RAD_TO_DEG
