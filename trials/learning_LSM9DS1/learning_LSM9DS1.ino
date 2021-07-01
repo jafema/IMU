@@ -55,7 +55,8 @@
    TODO
    https://theccontinuum.com/2012/09/24/arduino-imu-pitch-roll-from-accelerometer/
 
-
+  IMU Data Fusing: Complementary, Kalman, and Mahony Filter
+  http://www.olliw.eu/2013/imu-data-fusing/
 */
 
 
@@ -63,11 +64,11 @@
 #include <Wire.h> // to include constant macro PI, RAD_TO_DEG
 #include <math.h>
 
-#define SERIAL_PLOT_GYRO 1
+#define SERIAL_PLOT_GYRO 0
 #define SERIAL_PLOT_ACC 0
 #define MONITOR_SERIE 0
 #define PLOT_ROLL_YAW_HEADING 0
-
+#define SERIAL_PLOT_FILTER 1
 // Earth's magnetic field varies by location. Add or subtract
 // a declination to get a more accurate heading. Calculate
 // your's here:
@@ -82,9 +83,31 @@ enum e_axis {e_X, e_Y, e_Z, E_COUNT_OF_AXIS};
 void printAttitude(float ax, float ay, float az, float mx, float my, float mz);
 void getRollPitchYaw(float ax, float ay, float az, float mx, float my, float mz);
 
+// filter functions
+float EMA(float alpha, int latest, int stored);
+
+// EMA paramenters 
+float ema_a = 0.06;
+int ema_ema = 0;
+int ema = 0;
+
+/* EMA Exponential moving average
+ * link: https://www.norwegiancreations.com/2016/08/double-exponential-moving-average-filter-speeding-up-the-ema/
+ * 
+ * The EMA algorithm goes as follows:
+ * S[1] = Y[1]
+ * and for t>1:
+ * S[t] = alpha * Y[t] + (1 - alpha) * S[t-1] 
+ */
+float EMA(float alpha, int latest, int stored)
+{
+  return round(alpha*latest) + round((1-alpha)*stored);
+}
+
+
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
+  Serial.begin(19200);
 
   if (!IMU.begin()) {
     Serial.println("Failed to initalize IMU!");
@@ -135,7 +158,11 @@ void loop() {
     IMU.readMagneticField(magnet[e_X], magnet[e_Y], magnet[e_Z]);
   }
 
-
+  ema = EMA(ema_a, Gy[e_X], ema);
+  
+  //Double Exponential Moving Average (DEMA)
+  ema_ema = EMA(ema_a, ema, ema_ema);   
+  int DEMA = 2*ema - ema_ema;  // DEMA = 2* EMA - EMA(EMA)
 
 #if SERIAL_PLOT_GYRO
   Serial.print(Gy[e_X]);
@@ -144,6 +171,14 @@ void loop() {
   Serial.print('\t');
   Serial.print(Gy[e_Z]);
   Serial.print('\t');
+#endif
+
+#if SERIAL_PLOT_FILTER
+  Serial.print(Gy[e_X]);
+  Serial.print('\t');
+  Serial.print(ema);
+  Serial.print('\t');
+  Serial.println(DEMA);
 #endif
 
 #if SERIAL_PLOT_ACC
